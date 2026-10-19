@@ -121,6 +121,9 @@ function closeGenericModal() {
 }
 
 $('#modalCloseBtn').onclick = closeGenericModal;
+$('#modal').addEventListener('click', (e) => {
+  if (e.target === $('#modal')) closeGenericModal();
+});
 
 // ==========================================================================
 // Authentication System
@@ -1047,6 +1050,9 @@ function closeTaskModal() {
 }
 
 $('#taskModalCloseBtn').onclick = closeTaskModal;
+$('#taskModal').addEventListener('click', (e) => {
+  if (e.target === $('#taskModal')) closeTaskModal();
+});
 
 $('#taskDetailsForm').onsubmit = async (e) => {
   e.preventDefault();
@@ -1097,7 +1103,12 @@ $('#addCommentForm').onsubmit = async (e) => {
 $('#commentInput').onkeydown = (e) => {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
-    $('#addCommentForm').dispatchEvent(new Event('submit'));
+    const form = $('#addCommentForm');
+    if (form.requestSubmit) {
+      form.requestSubmit();
+    } else {
+      form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+    }
   }
 };
 
